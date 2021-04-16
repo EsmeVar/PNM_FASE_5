@@ -18,15 +18,17 @@ library(dplyr)
 library(tidyr)
 library(sf)
 library(leaflet)
+library(shiny)
 
 #-------------------- Colores ---------------------
 
 color_camp_1 <- 'blue'
-color_camp_2 <- 'red'
-color_camp_3 <- 'green'
-color_camp_4 <- 'purple'
+color_camp_2 <- 'blue'
+color_camp_3 <- 'blue'
+color_camp_4 <- 'blue'
 
-color_info <- 'pink'
+color_info <- 'green'
+color_ubic <- 'red'
 
 
 #--------------------- Íconos ---------------------
@@ -65,55 +67,16 @@ Row {data-height=10}
 ### **Última actualización de datos realizada el 25 de febrero de 2021 con base en los [datos publicados por la Dirección de de Agua del Ministerio de Ambiente y Energía de Costa Rica](http://mapas.da.go.cr/mapnew.php)**.
 
 
-Row
+Row {data-height=130}
 -----------------------------------------------------------------------
 ### código del punto muestreado {.value-box}
 ```{r}
-valueBox(("PS-ESQ-01"), 
-         caption = "Código del punto de muestreo", 
+valueBox(("PS-ESQ-01"),
+         caption = "Código del punto de muestreo",
          icon = icono_camp_1, 
          color = color_info
          )
 ```
-
-### Campaña 1 {.value-box}
-```{r}
-valueBox(("Indice Holandes: 4: Contaminación incipiente"), 
-         caption = "Campaña 1: Agosto 2019", 
-         icon = icono_camp_1, 
-         color = color_camp_1
-         )
-```
-
-### Campaña 2 {.value-box}
-```{r}
-valueBox(("Indice Holandes: N/A"), 
-         caption = "Campaña 2: Noviembre 2019",
-         icon = icono_camp_2, 
-         color = color_camp_2
-         )
-```
-
-### Campaña 3 {.value-box}
-```{r}
-valueBox(("Indice Holandes: N/A"), 
-         caption = "Campaña 3: Febrero 2020",
-         icon = icono_camp_3, 
-         color = color_camp_3
-         )
-```
-
-### Campaña 4 {.value-box}
-```{r}
-valueBox(("Indice Holandes: 1"), 
-         caption = "Campaña 4: Mayo 2020",
-         icon = icono_camp_4, 
-         color = color_camp_4
-         )
-```
-
-Row
------------------------------------------------------------------------
 
 ### Cuerpo de Agua {.value-box}
 ```{r}
@@ -136,19 +99,80 @@ valueBox(("Esquinas"),
 ### Coordenadas {.value-box}
 ```{r}
 valueBox(("Latitud: 970837,Longitud: 583319"), 
-         caption = "Coordenadas",
+         caption = "Coordenadas CRTM 05",
          icon = icono_info3, 
          color = color_info
 )
 ```
 
-### Ubicación geográfica {.value-box}
+Row
+-----------------------------------------------------------------------
+
+### Provincia {.value-box}
 ```{r}
-valueBox(("Provincia: Puntarenas / Cantón: Osa / Distrito: Piedras Blancas"), 
-         caption = "Ubicación geográfica",
+valueBox(("Puntarenas"), 
+         caption = "Provincia",
          icon = icono_info3, 
-         color = color_info
+         color = color_ubic
 )
+```
+
+### Cantón {.value-box}
+```{r}
+valueBox(("Osa"), 
+         caption = "Cantón",
+         icon = icono_info3, 
+         color = color_ubic
+)
+```
+
+### Distrito {.value-box}
+```{r}
+valueBox(("Piedras Blancas"), 
+         caption = "Distrito",
+         icon = icono_info3, 
+         color = color_ubic
+)
+```
+
+Row
+-----------------------------------------------------------------------
+
+
+### Campaña 1 {.value-box}
+```{r}
+valueBox(("Clase 4: Contaminación incipiente"), 
+         caption = "Indice Holandes - Campaña 1 (Agosto 2019)", 
+         icon = icono_camp_1, 
+         color = color_camp_1
+         )
+```
+
+### Campaña 2 {.value-box}
+```{r}
+valueBox(("N/A"), 
+         caption = "Indice Holandes - Campaña 2 (Noviembre 2019)",
+         icon = icono_camp_2, 
+         color = color_camp_2
+         )
+```
+
+### Campaña 3 {.value-box}
+```{r}
+valueBox(("N/A"), 
+         caption = "Indice Holandes - Campaña 3 (Febrero 2020)",
+         icon = icono_camp_3, 
+         color = color_camp_3
+         )
+```
+
+### Campaña 4 {.value-box}
+```{r}
+valueBox(("N/A"), 
+         caption = "Indice Holandes - Campaña 4 (Mayo 2020)",
+         icon = icono_camp_4, 
+         color = color_camp_4
+         )
 ```
 
 Row {data-width=400}
