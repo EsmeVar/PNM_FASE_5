@@ -1,4 +1,4 @@
-Cuenca;Cuerpo de Agua;Codigo;Fase;An/O INICIO;An/O FINAL;Responsable del muestreo;Clase: Indice Holandes;Clase: Indice BMWP-CR;Clasificacion del tramo del CA;geometry;Longitud (CRTM05);Latitud (CRTM05);Sitio de Muestreo;Provincia;Canton;Distrito;Mes;Año;Régimen de lluvia;Indice Holandes;Interpretacion (Indice holandes);BMWP-Estacion lluviosa (Agosto);Interpretacion;ESTADO ACTUAL;
+Cuenca;Cuerpo de Agua;Codigo;Fase;An/O INICIO;An/O FINAL;Responsable del muestreo;Clase: Indice Holandes;Clase: Indice BMWP-CR;Clasificacion del tramo del CA;geometry;Longitud (CRTM05);Latitud (CRTM05);Sitio de Muestreo;Provincia;Canton;Distrito;Mes;Año;Régimen_de_lluvia;Indice_Holandés;Interpretacion_IH;Indice_Biológico;Interpretacion_IB;ESTADO ACTUAL;
 Esquinas;Piedras Blancas;PS-ESQ-01;V;2019;2020;UCR;2;1;2;c(583319,21, 970837,56);583319,21;970837,56;Punto 1, Rio Piedras Blancas;Puntarenas;Osa;Piedras Blancas;Agosto;2019;Estacion lluviosa;4;Contaminacion incipiente;187;Aguas de calidad excelente;MONITOREO ACTIVO;
 ;;;;;;;;;;;;;;;;;Noviembre;2019;Transición Lluviosa-Seca;N/A;N/A;N/A;N/A;;
 ;;;;;;;;;;;;;;;;;Febrero ;2020;Estación Seca;N/A;N/A;N/A;N/A;;
