@@ -5,7 +5,7 @@ output:
     orientation: rows
     social: menu
     source_code: embed
-    vertical_layout: fill    
+    vertical_layout: scroll    
 ---
 
 ```{r setup, include=FALSE}
@@ -18,17 +18,20 @@ library(dplyr)
 library(tidyr)
 library(sf)
 library(leaflet)
+library(rgdal)
+library(knitr)
+
 
 
 #-------------------- Colores ---------------------
 
-color_camp_1 <- 'blue'
+color_camp_1 <- 'blue1'
 color_camp_2 <- 'blue'
 color_camp_3 <- 'blue'
 color_camp_4 <- 'blue'
 
-color_info <- 'green'
-color_ubic <- 'red'
+color_info <- '#19309e'
+color_ubic <- '#48906c'
 
 
 #--------------------- Íconos ---------------------
@@ -45,17 +48,44 @@ icono_info4 <- 'fas fa-clipboard-check'
 #--------------- Otros parámetros -----------------
 
 # Separador para lectura de datos CSV
-caracter_separador <- ','
+caracter_separador <- ';'
 ```
 
 
 ```{r, include=FALSE}
 #--------------- Archivos de datos ----------------
 
-archivo_datos_PNM <- 'https://raw.githubusercontent.com/EsmeVar/PNM_FASE_5/main/2021_04_15_PNM_INFO_COMPLETA.csv'
+archivo_datos_PNM <- read.csv('https://raw.githubusercontent.com/EsmeVar/PNM_FASE_5/main/2021_04_15_PNM_INFO_COMPLETA.csv', sep = ";")
 
-PNM <- 
-  st_read("https://raw.githubusercontent.com/EsmeVar/PNM_FASE_5/main/2021_04_15_PNM_INFO_COMPLETA.csv")
+#convertí aparte la tabla en un shape, es una opción en QGIS y la agrego directamenete y le doy la proyección
+PNM <- st_read("C:/Users/usuario/Documents/ESMERALDA/Año 2021/PNMI/PUBLICACION_DATOS_PNM_FASE_5/DATOS_PNM/PNM_WGS84_2.shp") %>%
+  st_transform(4326) %>%
+  st_make_valid()
+
+#para crear un mapa sería bonito agregar las cuencas y hacer coropletas
+cuencas <- st_read("C:/Users/usuario/Documents/ESMERALDA/Año 2021/PNMI/PUBLICACION_DATOS_PNM_FASE_5/DATOS_PNM/Cuencas hidrograficas/CUencas hidrograficas.shp")%>%
+  st_transform(4326) %>%
+  st_make_valid()
+
+names(archivo_datos_PNM)[1] <- "nombre" #cambia el nombre de la columna cuencas para que coincida con la del shp de cuencas
+
+#buscar y reemplazar para que coincidan los nombres entre ambas bases 
+archivo_datos_PNM$nombre <- gsub("Baru", "Barú", archivo_datos_PNM$nombre)
+archivo_datos_PNM$nombre <- gsub("Chirripo", "Chirripó", archivo_datos_PNM$nombre)
+archivo_datos_PNM$nombre <- gsub("Curen/a", "Cureña", archivo_datos_PNM$nombre)
+archivo_datos_PNM$nombre <- gsub("Frio", "Río Frío", archivo_datos_PNM$nombre)
+archivo_datos_PNM$nombre <- gsub("Grande de Terraba", "Térraba", archivo_datos_PNM$nombre)
+archivo_datos_PNM$nombre <- gsub("Jesus Maria", "Jesús María", archivo_datos_PNM$nombre)
+archivo_datos_PNM$nombre <- gsub("Moin", "Moín", archivo_datos_PNM$nombre)
+archivo_datos_PNM$nombre <- gsub("Peninsula de Nicoya", "Península de Nicoya", archivo_datos_PNM$nombre)
+archivo_datos_PNM$nombre <- gsub("Peninsula de Osa", "Península de Osa", archivo_datos_PNM$nombre)
+archivo_datos_PNM$nombre <- gsub("Reventazon", "Reventazón", archivo_datos_PNM$nombre)
+archivo_datos_PNM$nombre <- gsub("Sarapiqui", "Sarapiquí", archivo_datos_PNM$nombre)
+archivo_datos_PNM$nombre <- gsub("Tarcoles", "Tárcoles", archivo_datos_PNM$nombre)
+archivo_datos_PNM$nombre <- gsub("Estrella", "La Estrella", archivo_datos_PNM$nombre)
+
+#interseca los puntos con el shape para mezclar la información
+sf_datos <- inner_join(cuencas, archivo_datos_PNM,  by = "nombre")
 
 ```
 
@@ -67,12 +97,55 @@ Row {data-height=10}
 ### **Última actualización de datos realizada el 25 de febrero de 2021 con base en los [datos publicados por la Dirección de de Agua del Ministerio de Ambiente y Energía de Costa Rica](http://mapas.da.go.cr/mapnew.php)**.
 
 
+
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+<br>
+<br>
+[![Dirección de Agua](C:/Users/usuario/Documents/ESMERALDA/Año 2021/PNMI/PUBLICACION_DATOS_PNM_FASE_5/LOGOS DA-MINAE/da-logo230x.png)](http://www.da.go.cr)
+
+[![MINAE](C:/Users/usuario/Documents/ESMERALDA/Año 2021/PNMI/PUBLICACION_DATOS_PNM_FASE_5/LOGOS DA-MINAE/Logo MINAE 2020_230x.jpg)](https://minae.go.cr/)
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+**Elaboración:**
+
+Esmeralda Vargas Madrigal
+
+**Colaboración:**
+
+Kevin
+
 Row {data-height=130}
 -----------------------------------------------------------------------
 ### código del punto muestreado {.value-box}
 ```{r}
-valueBox(("PS-ESQ-01"),
-         caption = "Código del punto de muestreo",
+valueBox(value = paste(format(archivo_datos_PNM[41,3])),
+         caption = "Código del sitio de muestreo",
          icon = icono_camp_1, 
          color = color_info
          )
@@ -80,7 +153,7 @@ valueBox(("PS-ESQ-01"),
 
 ### Cuerpo de Agua {.value-box}
 ```{r}
-valueBox(("Piedras Blancas"),
+valueBox(value = paste(format(archivo_datos_PNM[41,2])),
          caption = "Cuerpo de Agua",
          icon = icono_info2,
          color = color_info
@@ -89,7 +162,7 @@ valueBox(("Piedras Blancas"),
 
 ### Cuenca {.value-box}
 ```{r}
-valueBox(("Esquinas"), 
+valueBox(value = paste(format(archivo_datos_PNM[41,1])), 
          caption = "Cuenca",
          icon = icono_info3, 
          color = color_info
@@ -98,8 +171,17 @@ valueBox(("Esquinas"),
 
 ### Coordenadas {.value-box}
 ```{r}
-valueBox(("Latitud: 970837,Longitud: 583319"), 
-         caption = "Coordenadas CRTM 05",
+valueBox(value = paste(format(archivo_datos_PNM[41,12])), 
+         caption = "Longitud (Coordenadas CRTM 05)",
+         icon = icono_info3, 
+         color = color_info
+)
+```
+
+### Coordenadas {.value-box}
+```{r}
+valueBox(value = paste(format(archivo_datos_PNM[41,13])), 
+         caption = "Latitud (Coordenadas CRTM 05)",
          icon = icono_info3, 
          color = color_info
 )
@@ -110,7 +192,7 @@ Row
 
 ### Provincia {.value-box}
 ```{r}
-valueBox(("Puntarenas"), 
+valueBox(value = paste(format(archivo_datos_PNM[41,15])), 
          caption = "Provincia",
          icon = icono_info3, 
          color = color_ubic
@@ -119,7 +201,7 @@ valueBox(("Puntarenas"),
 
 ### Cantón {.value-box}
 ```{r}
-valueBox(("Osa"), 
+valueBox(value = paste(format(archivo_datos_PNM[41,16])), 
          caption = "Cantón",
          icon = icono_info3, 
          color = color_ubic
@@ -128,57 +210,36 @@ valueBox(("Osa"),
 
 ### Distrito {.value-box}
 ```{r}
-valueBox(("Piedras Blancas"), 
+valueBox(value = paste(format(archivo_datos_PNM[41,17])), 
          caption = "Distrito",
          icon = icono_info3, 
          color = color_ubic
 )
 ```
 
-Row
+Row {data-height=120}
 -----------------------------------------------------------------------
-
-
-### Campaña 1 {.value-box}
+### **Resumen de resultados del Indice holandes**
 ```{r}
-valueBox(("Clase 4: Contaminación incipiente"), 
-         caption = "Indice Holandes - Campaña 1 (Agosto 2019)", 
-         icon = icono_camp_1, 
-         color = color_camp_1
-         )
+knitr::kable(
+  archivo_datos_PNM[43:, 18:24 ], caption = '**En una columna se muestra el resultado del Índice y en la siguiente la interpretación de ese resultado**'
+)
 ```
 
-### Campaña 2 {.value-box}
+Row {data-height=120}
+-----------------------------------------------------------------------
+### **Resumen de resultados del Indice BMWP-CR (Biológico)**
 ```{r}
-valueBox(("N/A"), 
-         caption = "Indice Holandes - Campaña 2 (Noviembre 2019)",
-         icon = icono_camp_2, 
-         color = color_camp_2
-         )
+knitr::kable(
+  archivo_datos_PNM[43:43, 25:33], caption = '**REn una columna se muestra el resultado del Índice y en la siguiente la interpretación de ese resultado**'
+)
 ```
 
-### Campaña 3 {.value-box}
-```{r}
-valueBox(("N/A"), 
-         caption = "Indice Holandes - Campaña 3 (Febrero 2020)",
-         icon = icono_camp_3, 
-         color = color_camp_3
-         )
-```
-
-### Campaña 4 {.value-box}
-```{r}
-valueBox(("N/A"), 
-         caption = "Indice Holandes - Campaña 4 (Mayo 2020)",
-         icon = icono_camp_4, 
-         color = color_camp_4
-         )
-```
 
 Row {data-width=400}
 -----------------------------------------------------------------------
 
-### Mapa de ubicación del punto de muestreo
+### **Mapa de ubicación del punto de muestreo**
 ```{r}
 
 mapa1 <- leaflet() %>%
@@ -215,97 +276,74 @@ muestreo se deberá repetir por una vez, en un período no mayor a 30 días natu
 <br>
 <br>
 
-**Nota:** Para mayor información sobre el monitoreo de la calidad de los cuerpos de agua superficiales, escríbanos al correo: daguas@da.go.cr 
+Row {data-width=50}
+-----------------------------------------------------------------------
+### **Notas:** 
 
+1. En los casos donde el resultado se reporta comio N/A, es debido a que no se tienen resultados del Índice por la imposibilidad de tomar la muestra, ya sea por el acceso al sitio de muestreo o porque no discurría agua por el cauce del cuerpo de agua.
 
-Campaña 1
+2. Para mayor información sobre el monitoreo de la calidad de los cuerpos de agua superficiales, escríbanos al correo: daguas@da.go.cr 
+
+CONSULTA DE DATOS
 =======================================================================
-Row {data-height=1}
+Row {data-height=20}
 -----------------------------------------------------------------------
+### CONSULTA DE DATOS DEL MONITOREO EN COSTA RICA (2015-2020)
 
-
-
-Row
+Column
 -----------------------------------------------------------------------
-
-### Campaña 1 {.value-box}
-
-
-Row {data-width=400}
------------------------------------------------------------------------
-
-### Mapa de puntos monitoreados en la cuenca
+### Distribución espacial de registros
 ```{r}
-
-color_camp_1 <- colorBin(palette = "Blues", 
-                        domain = PNM$Cuenca,
-                        bins = 10
-               )
-
-Mapa <- leaflet(PNM) %>% 
+leaflet() %>%
   fitBounds(lng1 = -86, lng2 = -82, lat1 = 8, lat2 = 11) %>%
-  addProviderTiles(providers$OpenStreetMap.Mapnik, group = "OpenStreetMap") %>%
-  addLayersControl(
-    baseGroups = c("OpenStreetMap"),
-    options = layersControlOptions(collapsed = TRUE)
-  ) %>%
-  addScaleBar(
-  ) %>%
+  addProviderTiles(providers$OpenStreetMap.Mapnik, group = "Open StreeT Map") %>%
+  addTiles(urlTemplate ="https://mts1.google.com/vt/lyrs=s&hl=en&src=app&x={x}&y={y}&z={z}&s=G", attribution = 'Google', group = "Google Maps") %>%
+  addMarkers(data= PNM, group = "PNM",
+             popup = paste(
+               "Sitio de muestreo: ", PNM$Sitio.de.M, "<br>",
+               "Código: ", PNM$Codigo, "<br>",
+               "Cuerpo de agua: ", PNM$Cuerpo.de, "<br>",
+               "Cuenca: ", PNM$Cuenca, "<br>",
+               "Fase de implementación: ", PNM$Fase, "<br>",
+               "Año de muestreo inicial: ", PNM$An.O.INICI, "<br>",
+               "Año de muestreo final: ", PNM$An.O.FINAL, "<br>",
+               "Provincia: ", PNM$Provincia, "<br>",
+               "Cantón: ", PNM$Canton, "<br>",
+               "Distrito: ", PNM$Distrito, "<br>",
+               "BMWP-CR, campaña 1: ", PNM$Interpreta, "<br>",
+               "Indice Holandes, campaña 1: ", PNM$Interpre_1, "<br>")) %>%
+  addPolygons(
+    data = sf_datos,
+    stroke=T, fillOpacity = 0,
+    color="red", weight=0.8, opacity= 2.0,
+    group = "Cuencas",
+    popup = paste(
+      "Cuenca: ", sf_datos$nombre, "<br>",
+      "Provincia: ", sf_datos$Provincia, "<br>",
+      "Cantón: ", sf_datos$Canton, "<br>",
+      "Distrito: ", sf_datos$Distrito, "<br>")) %>%
+  addLayersControl(baseGroups = c("Google Maps", "OpenStreetMap"),
+                   overlayGroups = c("PNM", "Cuencas"),
+                   options = layersControlOptions(collapsed = TRUE))  %>%
+  addScaleBar()  %>%
+  hideGroup(c("Cuencas")) %>%
   addMiniMap(
     toggleDisplay = TRUE,
     position = "bottomleft",
-    tiles = providers$OpenStreetMap.Mapnik
-  )
-
-# Despliegue del mapa
-Mapa
+    tiles = providers$OpenStreetMap.Mapnik)
 ```
 
-### **Gráfico de resultados campaña 1**
-
-
-
-Campaña 2
-=======================================================================
-Row {data-height=10}
------------------------------------------------------------------------
-### **Última actualización de datos realizada el 25 de febrero de 2021 con base en los [datos publicados por la Dirección de de Agua del Ministerio de Ambiente y Energía de Costa Rica](http://mapas.da.go.cr/mapnew.php)**.
-
-Row
+Column {.sidebar}
 -----------------------------------------------------------------------
 
-### Campaña 2 {.value-box}
+### Datos del monitoreo entre los años 2015 al 2020
 
-
-Row {data-width=400}
------------------------------------------------------------------------
-
-### **Mapa de campaña 2**
-
-
-### **Gráfico de resultados de campaña 2 - Caribe**
-
-
-Campaña 3
-=======================================================================
-Row {data-height=10}
------------------------------------------------------------------------
-### **Última actualización de datos realizada el 25 de febrero de 2021 con base en los [datos publicados por la Dirección de de Agua del Ministerio de Ambiente y Energía de Costa Rica](http://mapas.da.go.cr/mapnew.php)**.
-
-Row
------------------------------------------------------------------------
-
-
-
-Campaña 4
-=======================================================================
-Row {data-height=10}
------------------------------------------------------------------------
-### **Última actualización de datos realizada el 25 de febrero de 2021 con base en los [datos publicados por la Dirección de de Agua del Ministerio de Ambiente y Energía de Costa Rica](http://mapas.da.go.cr/mapnew.php)**.
-
-
-Row
------------------------------------------------------------------------
-
-
+```{r}
+sf_datos %>%
+  st_drop_geometry() %>%
+  select(Cuenca = nombre, Código = Codigo, "Cuerpo de agua" = Cuerpo.de.Agua, Provincia = Provincia, Cantón = Canton, Distrito = Distrito) %>%
+  DT::datatable(rownames = FALSE,
+                options = list(searchHighlight = TRUE, 
+                               language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
+                ))
 ```
