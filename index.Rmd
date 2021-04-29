@@ -1,5 +1,5 @@
 ---
-title: "MONITOREO DE LA CALIDAD DEL AGUA SUPERFICIAL (ETAPA I)"
+title: "MONITOREO DE LA CALIDAD DEL AGUA SUPERFICIAL (ETAPA I) DE COSTA RICA"
 output: 
   flexdashboard::flex_dashboard:
     orientation: rows
@@ -30,8 +30,8 @@ color_camp_2 <- 'blue'
 color_camp_3 <- 'blue'
 color_camp_4 <- 'blue'
 
-color_info <- '#19309e'
-color_ubic <- '#48906c'
+color_info <- '#9ccf75'
+color_ubic <- '#84c057'
 
 
 #--------------------- Íconos ---------------------
@@ -40,7 +40,7 @@ icono_camp_1 <- 'fas fa-hand-holding-water'
 icono_camp_2 <- 'fas fa-fill'
 icono_camp_3 <- 'fas fa-flask'
 icono_camp_4 <- 'fas fa-clipboard-list'
-icono_info1 <- 'fas fa-code'
+icono_info1 <- 'fas fa-cogs'
 icono_info2 <- 'fas fa-cogs'
 icono_info3 <- 'fas fa-edit'
 icono_info4 <- 'fas fa-clipboard-check'
@@ -48,14 +48,14 @@ icono_info4 <- 'fas fa-clipboard-check'
 #--------------- Otros parámetros -----------------
 
 # Separador para lectura de datos CSV
-caracter_separador <- ';'
+caracter_separador <- ','
 ```
 
 
 ```{r, include=FALSE}
 #--------------- Archivos de datos ----------------
 
-archivo_datos_PNM <- read.csv('https://raw.githubusercontent.com/EsmeVar/PNM_FASE_5/main/2021_04_15_PNM_INFO_COMPLETA.csv', sep = ";")
+archivo_datos_PNM <- read.csv('https://raw.githubusercontent.com/EsmeVar/PNM_FASE_5/main/2021_04_28_PNM_INFO_F5.csv', sep = ";")
 
 #convertí aparte la tabla en un shape, es una opción en QGIS y la agrego directamenete y le doy la proyección
 PNM <- st_read("C:/Users/usuario/Documents/ESMERALDA/Año 2021/PNMI/PUBLICACION_DATOS_PNM_FASE_5/DATOS_PNM/PNM_WGS84_2.shp") %>%
@@ -144,34 +144,32 @@ Row {data-height=130}
 -----------------------------------------------------------------------
 ### código del punto muestreado {.value-box}
 ```{r}
-valueBox(value = paste(format(archivo_datos_PNM[41,3])),
+valueBox(value = paste(format(archivo_datos_PNM[1,3])),
          caption = "Código del sitio de muestreo",
-         icon = icono_camp_1, 
+         icon = icono_info1, 
          color = color_info
          )
 ```
 
 ### Cuerpo de Agua {.value-box}
 ```{r}
-valueBox(value = paste(format(archivo_datos_PNM[41,2])),
+valueBox(value = paste(format(archivo_datos_PNM[1,2])),
          caption = "Cuerpo de Agua",
-         icon = icono_info2,
          color = color_info
          )
 ```
 
 ### Cuenca {.value-box}
 ```{r}
-valueBox(value = paste(format(archivo_datos_PNM[41,1])), 
+valueBox(value = paste(format(archivo_datos_PNM[1,1])), 
          caption = "Cuenca",
-         icon = icono_info3, 
          color = color_info
 )
 ```
 
 ### Coordenadas {.value-box}
 ```{r}
-valueBox(value = paste(format(archivo_datos_PNM[41,12])), 
+valueBox(value = paste(format(archivo_datos_PNM[1,12])), 
          caption = "Longitud (Coordenadas CRTM 05)",
          icon = icono_info3, 
          color = color_info
@@ -180,7 +178,7 @@ valueBox(value = paste(format(archivo_datos_PNM[41,12])),
 
 ### Coordenadas {.value-box}
 ```{r}
-valueBox(value = paste(format(archivo_datos_PNM[41,13])), 
+valueBox(value = paste(format(archivo_datos_PNM[1,13])), 
          caption = "Latitud (Coordenadas CRTM 05)",
          icon = icono_info3, 
          color = color_info
@@ -192,46 +190,34 @@ Row
 
 ### Provincia {.value-box}
 ```{r}
-valueBox(value = paste(format(archivo_datos_PNM[41,15])), 
+valueBox(value = paste(format(archivo_datos_PNM[1,15])), 
          caption = "Provincia",
-         icon = icono_info3, 
          color = color_ubic
 )
 ```
 
 ### Cantón {.value-box}
 ```{r}
-valueBox(value = paste(format(archivo_datos_PNM[41,16])), 
+valueBox(value = paste(format(archivo_datos_PNM[1,16])), 
          caption = "Cantón",
-         icon = icono_info3, 
          color = color_ubic
 )
 ```
 
 ### Distrito {.value-box}
 ```{r}
-valueBox(value = paste(format(archivo_datos_PNM[41,17])), 
+valueBox(value = paste(format(archivo_datos_PNM[1,17])), 
          caption = "Distrito",
-         icon = icono_info3, 
          color = color_ubic
 )
 ```
 
-Row {data-height=120}
+Row {data-height=210}
 -----------------------------------------------------------------------
-### **Resumen de resultados del Indice holandes**
+### **Resumen de resultados de los índices de la calidad del  agua superficial**
 ```{r}
 knitr::kable(
-  archivo_datos_PNM[43:, 18:24 ], caption = '**En una columna se muestra el resultado del Índice y en la siguiente la interpretación de ese resultado**'
-)
-```
-
-Row {data-height=120}
------------------------------------------------------------------------
-### **Resumen de resultados del Indice BMWP-CR (Biológico)**
-```{r}
-knitr::kable(
-  archivo_datos_PNM[43:43, 25:33], caption = '**REn una columna se muestra el resultado del Índice y en la siguiente la interpretación de ese resultado**'
+  archivo_datos_PNM[1:4, 18:24 ], caption = '**Utilizando el Índice Holandes y el Índice Biológico (BMWP-CR), según el Decreto Ejecutivo N°33903-MINAE-S**'
 )
 ```
 
@@ -246,9 +232,10 @@ mapa1 <- leaflet() %>%
   addTiles() %>% 
   addProviderTiles(providers$Stamen.TonerLite, group = "Stamen Toner Lite") %>%
   addProviderTiles(providers$Esri.WorldImagery, group = "Imágenes de ESRI") %>% 
-  addMarkers(lng=-83.243, lat=8.779, 
-             popup="PS-ESQ-01"
-  ) %>%  
+  addMarkers(data= PNM, group = "PNM", 
+             popup= paste(
+               "Sitio de muestreo: ", PNM$Codigo
+  )) %>%  
   addLayersControl(
     baseGroups = c("OpenStreetMap", "Stamen Toner Lite", "Imágenes de ESRI")
   )
@@ -290,8 +277,24 @@ Row {data-height=20}
 -----------------------------------------------------------------------
 ### CONSULTA DE DATOS DEL MONITOREO EN COSTA RICA (2015-2020)
 
-Column
+
+Column {data-height=1000}
 -----------------------------------------------------------------------
+
+### Datos del monitoreo entre los años 2015 al 2020
+
+```{r}
+sf_datos %>%
+  st_drop_geometry() %>%
+  select(Cuenca = nombre, Código = Codigo, "Cuerpo de agua" = Cuerpo.de.Agua, Provincia = Provincia, Cantón = Canton, Distrito = Distrito) %>%
+  DT::datatable(rownames = FALSE,
+                options = list(searchHighlight = TRUE, 
+                               language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
+                ))
+```
+
+
+
 ### Distribución espacial de registros
 ```{r}
 leaflet() %>%
@@ -309,9 +312,7 @@ leaflet() %>%
                "Año de muestreo final: ", PNM$An.O.FINAL, "<br>",
                "Provincia: ", PNM$Provincia, "<br>",
                "Cantón: ", PNM$Canton, "<br>",
-               "Distrito: ", PNM$Distrito, "<br>",
-               "BMWP-CR, campaña 1: ", PNM$Interpreta, "<br>",
-               "Indice Holandes, campaña 1: ", PNM$Interpre_1, "<br>")) %>%
+               "Distrito: ", PNM$Distrito, "<br>")) %>%
   addPolygons(
     data = sf_datos,
     stroke=T, fillOpacity = 0,
@@ -333,17 +334,3 @@ leaflet() %>%
     tiles = providers$OpenStreetMap.Mapnik)
 ```
 
-Column {.sidebar}
------------------------------------------------------------------------
-
-### Datos del monitoreo entre los años 2015 al 2020
-
-```{r}
-sf_datos %>%
-  st_drop_geometry() %>%
-  select(Cuenca = nombre, Código = Codigo, "Cuerpo de agua" = Cuerpo.de.Agua, Provincia = Provincia, Cantón = Canton, Distrito = Distrito) %>%
-  DT::datatable(rownames = FALSE,
-                options = list(searchHighlight = TRUE, 
-                               language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
-                ))
-```
