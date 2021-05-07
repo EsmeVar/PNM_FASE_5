@@ -35,14 +35,9 @@ color_ubic <- '#9fbe88'
 
 #--------------------- Íconos ---------------------
 
-icono_camp_1 <- 'fas fa-hand-holding-water'
-icono_camp_2 <- 'fas fa-fill'
-icono_camp_3 <- 'fas fa-flask'
-icono_camp_4 <- 'fas fa-clipboard-list'
+
 icono_info1 <- 'fas fa-cogs'
-icono_info2 <- 'fas fa-cogs'
-icono_info3 <- 'fas fa-edit'
-icono_info4 <- 'fas fa-clipboard-check'
+icono_info2 <- 'fas fa-edit'
 
 #--------------- Otros parámetros -----------------
 
@@ -89,7 +84,7 @@ sf_datos <- inner_join(cuencas, archivo_datos_PNM,  by = "nombre")
 ```
 
 
-Resumen
+**RESUMEN**
 =======================================================================
 Row {data-height=10}
 -----------------------------------------------------------------------
@@ -170,7 +165,7 @@ valueBox(value = paste(format(archivo_datos_PNM[1,1])),
 ```{r}
 valueBox(value = paste(format(archivo_datos_PNM[1,12])), 
          caption = "Longitud (Coordenadas CRTM 05)",
-         icon = icono_info3, 
+         icon = icono_info2, 
          color = color_info
 )
 ```
@@ -179,7 +174,7 @@ valueBox(value = paste(format(archivo_datos_PNM[1,12])),
 ```{r}
 valueBox(value = paste(format(archivo_datos_PNM[1,13])), 
          caption = "Latitud (Coordenadas CRTM 05)",
-         icon = icono_info3, 
+         icon = icono_info2, 
          color = color_info
 )
 ```
@@ -245,6 +240,9 @@ leaflet(data = PNM[41:41,]) %>%
 
 
 ### **Información de los datos publicados**
+
+<br>
+
 **1. El monitoreo de los cuerpos de agua superficiales y la clasificación de su calidad se realizó según:**
 
 - Decreto N° 33903-MINAE-S. REGLAMENTO PARA LA EVALUACIÓN Y CLASIFICACION DE LA CALIDAD DE CUERPOS DE AGUA SUPERFICIALES.
@@ -254,11 +252,13 @@ leaflet(data = PNM[41:41,]) %>%
 - Programa nacional de monitoreo de la calidad de los cuerpos de agua del país.
 <br>
 <br>
+<br>
 
 **2. Para una mejor interpretación de los resultados, se aclara:**
 
 Según el artículo 20 del Decreto N° 33903-MINAE-S, en aquellos casos en que el valor del Índice de Clasificación Holandés y el valor del Índice Biológico presenten una diferencia de más de una clase entre ellos, el
 muestreo se deberá repetir por una vez, en un período no mayor a 30 días naturales. En caso de que se mantenga la diferencia de clases se clasifica en la de menor calidad.
+<br>
 <br>
 <br>
 
@@ -270,17 +270,16 @@ Row {data-width=50}
 
 2. Para mayor información sobre el monitoreo de la calidad de los cuerpos de agua superficiales, escríbanos al correo: daguas@da.go.cr 
 
-CONSULTA DE DATOS
+**CONSULTA DE DATOS**
 =======================================================================
-Row {data-height=20}
+Row {data-height=30}
 -----------------------------------------------------------------------
-### CONSULTA DE DATOS DEL MONITOREO EN COSTA RICA (2015-2020)
+#### **CONSULTA DE DATOS DEL MONITOREO EN COSTA RICA (2015-2020)**
 
-
-Column {data-height=1000}
+Column {data-height=900}
 -----------------------------------------------------------------------
 
-### Datos del monitoreo entre los años 2015 al 2020
+### **Datos del monitoreo entre los años 2015 al 2020**
 
 ```{r}
 sf_datos %>%
@@ -294,7 +293,8 @@ sf_datos %>%
 
 
 
-### Distribución espacial de registros
+### **Distribución espacial de registros**
+
 ```{r}
 leaflet() %>%
   fitBounds(lng1 = -86, lng2 = -82, lat1 = 8, lat2 = 11) %>%
