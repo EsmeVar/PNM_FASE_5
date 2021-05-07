@@ -4,7 +4,6 @@ output:
   flexdashboard::flex_dashboard:
     orientation: rows
     social: menu
-    source_code: embed
     vertical_layout: scroll    
 ---
 
@@ -30,8 +29,8 @@ color_camp_2 <- 'blue'
 color_camp_3 <- 'blue'
 color_camp_4 <- 'blue'
 
-color_info <- '#9ccf75'
-color_ubic <- '#84c057'
+color_info <- '#7fab5e'
+color_ubic <- '#9fbe88'
 
 
 #--------------------- Íconos ---------------------
@@ -138,7 +137,7 @@ Esmeralda Vargas Madrigal
 
 **Colaboración:**
 
-Kevin
+Kevin Chavarría Esquivel
 
 Row {data-height=130}
 -----------------------------------------------------------------------
@@ -228,20 +227,20 @@ Row {data-width=400}
 ### **Mapa de ubicación del punto de muestreo**
 ```{r}
 
-mapa1 <- leaflet() %>%
-  addTiles() %>% 
+leaflet(data = PNM[41:41,]) %>%
+  addTiles() %>%
   addProviderTiles(providers$Stamen.TonerLite, group = "Stamen Toner Lite") %>%
   addProviderTiles(providers$Esri.WorldImagery, group = "Imágenes de ESRI") %>% 
-  addMarkers(data= PNM, group = "PNM", 
+  addMarkers(~LONG, ~LAT, 
              popup= paste(
-               "Sitio de muestreo: ", PNM$Codigo
+               "Sitio de muestreo: ", PNM$Codigo[41]
   )) %>%  
   addLayersControl(
-    baseGroups = c("OpenStreetMap", "Stamen Toner Lite", "Imágenes de ESRI")
+    baseGroups = c("Imágenes de ESRI", "OpenStreetMap", "Stamen Toner Lite")
   )
 
 # Despliegue del mapa
-mapa1
+
 ```
 
 
